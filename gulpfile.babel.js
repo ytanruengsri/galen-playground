@@ -1,33 +1,35 @@
+'use strict';
+
 // Built in packages.
-var spawn = require('child_process').spawn;
+import { spawn } from 'child_process';
 
 // Arguments
-var argv = require('yargs').argv;
+import { argv } from 'yargs';
 
 // Generic npm packages.
-var async = require('async');
-var del   = require('del');
-var index = require('serve-index');
+import async from 'async';
+import del from 'del';
+import index from 'serve-index';
 
 // The gulp related plugins.
-var gulp  = require('gulp');
-var serve = require('gulp-serve');
-var tap   = require('gulp-tap');
-var gutil = require('gulp-util');
+import gulp from 'gulp';
+import serve from 'gulp-serve';
+import tap from 'gulp-tap';
+import gutil from 'gulp-util';
 
 // The port on which the local server should serve up the reports on.
-var port = 3333;
+const port = 3333;
 
 // The folder in which the generated reports should be saved to.
-var reportsDir = 'reports';
+const reportsDir = 'reports';
 
 // A `glob` for where the Galen test suites can be found.
-var suitesGlob = 'tests/specs/**/*.spec.js';
+const suitesGlob = 'tests/specs/**/*.spec.js';
 
 // Clean out the directory where the reports will be saved to. This is done so
 // as not to pollute the reports directory with old/potentially unwanted files.
-gulp.task('clean', function (done) {
-    del([reportsDir], function (err) {
+gulp.task('clean', (done) => {
+    del([reportsDir], (err) => {
         if (err) {
             throw err;
         }
@@ -35,28 +37,28 @@ gulp.task('clean', function (done) {
     });
 });
 
-gulp.task('logging', ['clean'], function (done) {
+gulp.task('logging', ['clean'], (done) => {
     gutil.log('Starting logging task ....');
     done();
 });
 
 // This is the task that will kick off running all the Galen test suites.
-gulp.task('test', function (done) {
-    var isPhantomjs = argv.browser === 'phantomjs';
+gulp.task('test', (done) => {
+    const isPhantomjs = argv.browser === 'phantomjs';
 
     // Here we create an empty Array to store vinyl File Objects.
-    var files = [];
+    let files = [];
 
     // Here we define a simple utility Function that we will call to
     // execute the Galen specs.
-    var galen = function galen (file, callback) {
+    var galen = (file, callback) => {
         spawn('galen', [
             'test',
             file.path,
             isPhantomjs ? '-Dphantomjs.binary.path=/Users/ytanruengsri/dev/tools/phantomjs/bin/phantomjs' : '',
             '--htmlreport',
-            reportsDir + '/' + file.relative.replace(/\.js/, '')
-        ], {'stdio' : 'inherit'}).on('close', function (code) {
+            `${reportsDir}/${file.relative.replace(/\.js/, '')}`
+        ], {'stdio' : 'inherit'}).on('close', (code) => {
             callback(code === 0);
         });
     };
@@ -78,17 +80,17 @@ gulp.task('test', function (done) {
     // are finished with this task and that we are good to continue with
     // whichever task in next in the queue.
     gulp.src([suitesGlob])
-        .pipe(tap(function (file) {
+        .pipe(tap((file) => {
             files.push(file);
         }))
-        .on('end', function () {
-            async.rejectSeries(files, function (file, finished) {
+        .on('end', () => {
+            async.rejectSeries(files, (file, finished) => {
                 galen(file, finished);
-            }, function (errors) {
+            }, (errors) => {
                if (errors && errors.length > 0) {
-                  done("Galen reported failed tests: " + (errors.map(function(f) {
+                  done('Galen reported failed tests: ' + (errors.map((f) => {
                      return f.relative;
-                  }).join(", ")));
+                  }).join(', ')));
                } else {
                   done();
                }
@@ -104,7 +106,7 @@ gulp.task('test', function (done) {
 // This task requires that the `test` task is run first. This is so Galen can
 // generate the required reports and present us with the files to display.
 gulp.task('serve', ['test'], serve({
-    'middleware' : function (req, res, next) {
+    'middleware': (req, res, next) => {
         index(reportsDir, {
             'filter'     : false,
             'hidden'     : true,
