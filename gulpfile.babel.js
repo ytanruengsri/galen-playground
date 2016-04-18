@@ -16,6 +16,8 @@ import gulp from 'gulp';
 import serve from 'gulp-serve';
 import tap from 'gulp-tap';
 import gutil from 'gulp-util';
+import babel from 'gulp-babel';
+import sourcemaps from 'gulp-sourcemaps';
 
 // The port on which the local server should serve up the reports on.
 const port = 3333;
@@ -35,11 +37,6 @@ gulp.task('clean', (done) => {
         }
         done();
     });
-});
-
-gulp.task('logging', ['clean'], (done) => {
-    gutil.log('Starting logging task ....');
-    done();
 });
 
 // This is the task that will kick off running all the Galen test suites.
@@ -80,6 +77,7 @@ gulp.task('test', (done) => {
     // are finished with this task and that we are good to continue with
     // whichever task in next in the queue.
     gulp.src([suitesGlob])
+        .pipe(babel())
         .pipe(tap((file) => {
             files.push(file);
         }))
