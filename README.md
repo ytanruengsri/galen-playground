@@ -1,8 +1,13 @@
 # galen-playground
 
-## Installation
+## Prerequisite
 - [Phantomjs](http://phantomjs.org/download.html)
 - [Galen](http://galenframework.com/download/)
+
+## Installation
+```
+$ npm install
+```
 
 ## Run tests
 ```
