@@ -42,7 +42,7 @@ gulp.task('logging', ['clean'], function (done) {
 
 // This is the task that will kick off running all the Galen test suites.
 gulp.task('test', function (done) {
-    var isPhantomjs = argv.browser == 'phantomjs';
+    var isPhantomjs = argv.browser === 'phantomjs';
 
     // Here we create an empty Array to store vinyl File Objects.
     var files = [];
