@@ -1,0 +1,28 @@
+{
+  "name": "galen-playground",
+  "version": "0.1.0",
+  "description": "Playground project for galen",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ytanruengsri/galen-playground.git"
+  },
+  "author": "Yuthasak Tanruengsri",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/ytanruengsri/galen-playground/issues"
+  },
+  "homepage": "https://github.com/ytanruengsri/galen-playground#readme",
+  "devDependencies": {
+    "async": "^2.0.0-rc.3",
+    "del": "^2.2.0",
+    "gulp": "^3.9.1",
+    "gulp-serve": "^1.2.0",
+    "gulp-tap": "^0.1.3",
+    "gulp-util": "^3.0.7",
+    "serve-index": "^1.7.3",
+    "yargs": "^4.6.0"
+  }
+}
